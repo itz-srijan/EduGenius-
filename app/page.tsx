@@ -1,6 +1,7 @@
 import CompanionCard from "@/components/CompanionCard";
 import CompanionsList from "@/components/CompanionsList";
 import Cta from "@/components/Cta";
+import RecentlyCompletedLessons from "@/components/RecentlyCompletedLessons";
 
 export default function Home() {
   const companionCardsData = [
@@ -46,7 +47,7 @@ export default function Home() {
         ))}
       </section>
       <section className='home-section'>
-        <CompanionsList />
+        <RecentlyCompletedLessons />
         <Cta />
       </section>
     </main>
