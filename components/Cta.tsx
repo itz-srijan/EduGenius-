@@ -1,7 +1,10 @@
+"use client";
 import React from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const Cta = () => {
+  const router = useRouter();
   return (
     <div className='bg-[#232323] rounded-3xl p-8 h-full min-h-[500px] w-full flex flex-col items-center text-center shadow-lg relative'>
       {/* Pill */}
@@ -30,7 +33,10 @@ const Cta = () => {
         />
       </div>
       {/* Button */}
-      <button className='bg-[#FF5C2A] hover:bg-[#ff7a4d] text-white text-lg font-bold py-3 px-6 rounded-2xl w-full flex items-center justify-center gap-2 transition-colors shadow-md'>
+      <button
+        onClick={() => router.push("/companions/new")}
+        className='bg-[#FF5C2A] hover:bg-[#ff7a4d] cursor-pointer text-white text-lg font-bold py-3 px-6 rounded-2xl w-full flex items-center justify-center gap-2 transition-colors shadow-md'
+      >
         <span className='text-2xl'>＋</span> Build New Companion
       </button>
     </div>

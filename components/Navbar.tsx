@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import NavItems from "./NavItems";
 import { cn } from "@/lib/utils";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 const NavbarItems = [
   { label: "Home", href: "/" },
@@ -37,7 +38,14 @@ const Navbar = () => {
             )}
           />
         ))}
-        <p>SignIn</p>
+        <SignedOut>
+          <SignInButton>
+            <button className='btn-signin'>Sign In</button>
+          </SignInButton>
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
       </div>
     </nav>
   );

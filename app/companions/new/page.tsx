@@ -1,5 +1,7 @@
+import CompanionBuilderForm from "@/components/companionBuilderForm";
+
 const NewCompanion = () => {
-  return <div>page</div>;
+  return <CompanionBuilderForm />;
 };
 
 export default NewCompanion;
