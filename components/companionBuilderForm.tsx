@@ -12,35 +12,42 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 
-interface CompanionFormValues {
-  icon: FileList | null;
-  name: string;
-  subject: string;
-  topic: string;
-  voiceType: string;
-  speakingStyle: string;
-  language: string;
-}
+import { createCompanion } from "@/lib/actions/companions.action";
+import { redirect } from "next/navigation";
 
-const defaultValues: CompanionFormValues = {
-  icon: null,
+// interface CompanionFormValues {
+//   icon: FileList | null;
+//   name: string;
+//   subject: string;
+//   topic: string;
+//   voiceType: string;
+//   speakingStyle: string;
+//   language: string;
+// }
+
+const defaultValues: CreateCompanion = {
   name: "",
   subject: "",
   topic: "",
-  voiceType: "Female",
-  speakingStyle: "Formal",
-  language: "English",
+  voice: "",
+  style: "",
+  duration: "15",
 };
 
 const CompanionBuilderForm = () => {
-  const form = useForm<CompanionFormValues>({
+  const form = useForm<CreateCompanion>({
     defaultValues,
     mode: "onTouched",
   });
 
-  const onSubmit: SubmitHandler<CompanionFormValues> = (data) => {
-    // Handle form submission
-    console.log(data);
+  const onSubmit: SubmitHandler<CreateCompanion> = async (data) => {
+    const companion = await createCompanion(data);
+
+    if (companion) redirect(`/companions/${companion.id}`);
+    else {
+      redirect("/");
+      console.error("Failed to create companion");
+    }
   };
 
   return (
@@ -52,7 +59,7 @@ const CompanionBuilderForm = () => {
           className='space-y-6 bg-white p-8 rounded-xl shadow-md'
         >
           {/* Companion Icon */}
-          <FormField
+          {/* <FormField
             name='icon'
             control={form.control}
             render={({ field }) => (
@@ -72,7 +79,7 @@ const CompanionBuilderForm = () => {
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
 
           {/* Companion Name */}
           <FormField
@@ -139,7 +146,7 @@ const CompanionBuilderForm = () => {
 
           {/* Voice Type */}
           <FormField
-            name='voiceType'
+            name='voice'
             control={form.control}
             render={({ field }) => (
               <FormItem>
@@ -160,7 +167,7 @@ const CompanionBuilderForm = () => {
 
           {/* Speaking Style */}
           <FormField
-            name='speakingStyle'
+            name='style'
             control={form.control}
             render={({ field }) => (
               <FormItem>
@@ -179,22 +186,19 @@ const CompanionBuilderForm = () => {
             )}
           />
 
-          {/* Language */}
+          {/* Duration */}
           <FormField
-            name='language'
+            name='duration'
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Language</FormLabel>
+                <FormLabel>Enter Estimated Duration in Minutes</FormLabel>
                 <FormControl>
-                  <select
+                  <input
+                    type='text'
                     className='w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary'
                     {...field}
-                  >
-                    <option value='English'>English</option>
-                    <option value='Spanish'>Spanish</option>
-                    <option value='French'>French</option>
-                  </select>
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
