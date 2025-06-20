@@ -3,6 +3,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { createSupabaseClient } from "@/lib/supabase";
 
+//creating companions in db
 export const createCompanion = async (formData: CreateCompanion) => {
   const { userId: author } = await auth();
   const supabase = createSupabaseClient();
@@ -19,4 +20,35 @@ export const createCompanion = async (formData: CreateCompanion) => {
     throw new Error(error?.message || "Failed to create companion");
 
   return data[0];
+};
+
+//fetching companions from db
+export const getAllCompanions = async ({
+  limit = 10,
+  page,
+  subject,
+  topic,
+}: GetAllCompanions) => {
+  const supabase = createSupabaseClient();
+
+  if (!page || page < 1) page = 1;
+
+  let query = supabase.from("companions").select();
+
+  if (subject && topic) {
+    query = query
+      .ilike("subject", `%${subject}%`)
+      .or(`topic.ilike.%${topic}%, name.ilike.%${topic}%`);
+  } else if (subject) {
+    query = query.ilike("subject", `%${subject}%`);
+  } else if (topic) {
+    query = query.or(`topic.ilike.%${topic}%, name.ilike.%${topic}%`);
+  }
+
+  query = query.range((page - 1) * limit, page * limit - 1);
+
+  const { data, error } = await query;
+  if (error) throw new Error(error.message || "Failed to fetch companions");
+
+  return data;
 };
